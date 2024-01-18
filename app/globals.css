@@ -2,26 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    font-family: 'font-serif', sans-serif;
+}
+
+@layer base {
+    body {
+        @apply bg-white;
+    }
+}
+
+:root {
+    --primary-color: #1e6bc4; 
+}
+
+button.primary-button {
+    background-color: var(--primary-color);
+}
+
+.logo {
+    color: var(--primary-color);
+}
+
+.category_style {
+    @apply bg-neutral-100 text-slate-700;
+}
+
+.category_style:hover {
+    @apply bg-primary-color text-white;
+}
+
+.offer_style {
+    @apply bg-slate-300 ;
+}
+
+.offer_style:hover {
+    @apply bg-blue-400 ;
+}
+
+.product_style {
+    @apply bg-white ;
+}
+
+.collection_top {
+    @apply bg-zinc-100 ;
+}
+
+.collection_bottom {
+    @apply bg-white ;
+}
+
+.footer {
+    @apply bg-slate-100 ;
+}
+
+.shopnow {
+    @apply bg-white ;
+}
+
+.primary {
+    @layer components {
+        .border-primary-color {
+            border-color: var(--primary-color);
+            @layer components {
+                .button-primary-color {
+                    background-color: var(--primary-color); 
+                }
+            }
+        }
+    }
+    @apply border-primary-color button-primary-color ;
+}
+
+@layer components {
+    .bg-primary-color {
+        background-color: var(--primary-color);
+    }
 }
