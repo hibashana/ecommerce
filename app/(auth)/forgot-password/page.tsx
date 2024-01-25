@@ -1,11 +1,11 @@
+
 "use client"
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { MdOutlineMailOutline, MdArrowBackIos } from 'react-icons/md';
 import Link from 'next/link';
 import { baseURL } from '@/utils/constants';
-import { Forgotpass } from '@/app/types';
+// import { Forgotpass } from '@/app/types';
 import { useRouter } from 'next/navigation';
-
 
 const ForgotPass = () => {
   const [formData, setFormData] = useState({ email: '' });
@@ -14,9 +14,8 @@ const ForgotPass = () => {
 
   const setpass = async (): Promise<void> => {
     try {
-      const baseURL = "https://0e15-2405-201-f00a-882c-64fd-eda5-d757-1116.ngrok-free.app/v1";
+      // const baseURL = "https://0e15-2405-201-f00a-882c-64fd-eda5-d757-1116.ngrok-free.app/v1";
       const URL = `${baseURL}/auth/forgot-password`;
-  
       const response = await fetch(`${URL}`, {
         method: 'POST',
         headers: {
@@ -24,19 +23,12 @@ const ForgotPass = () => {
         },
         body: JSON.stringify(formData),
       });
-  
+
       if (response.ok) {
-        // Check if the response has a valid JSON content
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json();
-          // Handle success response as needed
-          console.log('Successful', data);
-          router.push('/reset-password');
-        } else {
-          // Handle unexpected response format
-          console.error('Unexpected response format');
-        }
+        const data = await response.json();
+        // Handle success response as needed
+        console.log('Successful', data);
+        router.push(`/reset-password?token=${data.resetPasswordToken}`);
       } else {
         setErrorMessage('Incorrect email.');
         console.error('Failed');
@@ -45,7 +37,6 @@ const ForgotPass = () => {
       console.error('Error:', error);
     }
   };
-  
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -56,13 +47,16 @@ const ForgotPass = () => {
     e.preventDefault();
     setpass();
   };
+ // Redirect after a successful request
+  // useEffect(() => {
+  //   if (formData.email && !errorMessage) {
+  //     router.push('/update_pass');
+  //   }
+  // }, [formData.email, errorMessage, router]);
 
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="shadow-lg w-80 p-9">
-        {/* <Link href="/login">
-          <MdArrowBackIos />
-        </Link> */}
         <h1 className="font-bold py-5">Forgot password?</h1>
         <h3 className="text-sm py-5">
           Enter email associated with your account and we'll send an email with instructions to reset your password
@@ -83,8 +77,7 @@ const ForgotPass = () => {
         </div>
         <div className="flex justify-center">
           <button className="mt-6 flex button-primary-color text-white rounded-3xl p-1 px-4" onClick={handleSubmit}>
-          Send
-            {/* <Link href="/update_pass"></Link> */}
+            Send
           </button>
         </div>
         {errorMessage && <p className="p-1  text-center text-red-500 ">{errorMessage}</p>}

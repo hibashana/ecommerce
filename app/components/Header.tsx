@@ -43,7 +43,7 @@ const Header = () => {
 
       <div className="flex lg:ml-auto sm:gap-8 md:gap-8 gap-36 text-[30px]">
         <div className="relative">
-          <BiUser />
+          <Link href={"/login"}><BiUser /></Link>
         </div>
         <div className="relative">
           <Link href={"/wishlist"} className='hover:text-black cursor-pointer duration-200 relative group'> 
@@ -54,7 +54,7 @@ const Header = () => {
           </Link>
         </div>
         <div className="relative">
-        <Link href={"/cart"} className='hover:text-black cursor-pointer duration-200 relative group'> 
+        <Link href={"/"} className='hover:text-black cursor-pointer duration-200 relative group'> 
           <FaShoppingCart />
           <div className="bg-red-600 text-white rounded-full absolute top-0 right-0 w-[18px] h-[18px] text-[12px] text-center">
             0

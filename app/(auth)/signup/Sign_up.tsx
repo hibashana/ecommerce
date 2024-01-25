@@ -42,7 +42,7 @@ const Signup: React.FC = () => {
 
   const signup = async (e: FormEvent) => {
     e.preventDefault();
-    const baseURL = "https://0e15-2405-201-f00a-882c-64fd-eda5-d757-1116.ngrok-free.app/v1";
+    // const baseURL = "https://0e15-2405-201-f00a-882c-64fd-eda5-d757-1116.ngrok-free.app/v1";
     const URL = `${baseURL}/auth/register`;
 
     if (!isValidEmail(formData.email)) {

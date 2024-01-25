@@ -54,37 +54,51 @@
 
 
 // export default UpdatePassword;
+
+
+
 "use client"
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { MdArrowBackIos } from 'react-icons/md';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useParams,useSearchParams } from 'next/navigation';
+import { baseURL } from '@/utils/constants';
 
 interface UpdatePasswordProps {
-  token: string;
+  // token: string;
 }
+  
+const UpdatePassword: React.FC<UpdatePasswordProps> = ({  }) => {
 
-const UpdatePassword: React.FC<UpdatePasswordProps> = ({ token }) => {
-  const baseURL = "https://0e15-2405-201-f00a-882c-64fd-eda5-d757-1116.ngrok-free.app/v1";
-  const URL = `${baseURL}/auth/reset-password?token=${token}`;
+  const router = useRouter();
   const [password, setPassword] = useState('');
-  // const [confirmPassword, setConfirmPassword] = useState('');
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
+  const searchParams = useSearchParams()
+  const token = searchParams.get('token') 
+  console.log(token);
+  
 
-  // const handleConfirmPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setConfirmPassword(e.target.value);
-  // };
+  // const param=useParams();
+  // const params = useParams<{ token: string; }>()
+  // const token=param.token;
+
+  
+  // console.log(`${token}`);
+
+
 
   const handleConfirmClick = async (e: FormEvent) => {
     e.preventDefault();
 
-    // if (password !== confirmPassword) {
-    //   // Passwords don't match, handle accordingly
-    //   console.error('Passwords do not match');
-    //   return;
-    // }
+  // const baseURL = "https://0e15-2405-201-f00a-882c-64fd-eda5-d757-1116.ngrok-free.app/v1";
+  const URL = `${baseURL}/auth/reset-password?token=${token}`;
+  
+  //  console.log(`${token}`);
+   
 
     try {
       const response = await fetch(URL, {
@@ -98,11 +112,11 @@ const UpdatePassword: React.FC<UpdatePasswordProps> = ({ token }) => {
         }),
       });
 
-      if (response.ok) {
-        // Password reset successful, handle accordingly
+      if (response.status === 200) {
         console.log('Password reset successful');
+        router.push('/Login');   
       } else {
-        // Password reset failed, handle accordingly
+        
         console.error('Password reset failed');
       }
     } catch (error) {
@@ -116,6 +130,7 @@ const UpdatePassword: React.FC<UpdatePasswordProps> = ({ token }) => {
         {/* <Link href="/forgot_pass">
           <MdArrowBackIos />
         </Link> */}
+        <form>
         <h1 className="font-bold py-5">Create new password</h1>
         <h3 className="text-sm py-5">
           Your new password must be different from previously used password
@@ -150,6 +165,7 @@ const UpdatePassword: React.FC<UpdatePasswordProps> = ({ token }) => {
             Confirm
           </button>
         </div>
+        </form>
       </div>
     </div>
   );

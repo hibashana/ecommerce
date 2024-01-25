@@ -7,6 +7,8 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaFacebookF } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { baseURL } from '@/utils/constants';
+import { setCookie } from 'cookies-next';
+import { Toaster, toast } from 'sonner'
 
 interface FormData {
   email: string;
@@ -30,7 +32,7 @@ const Login = () => {
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const baseURL="https://0e15-2405-201-f00a-882c-64fd-eda5-d757-1116.ngrok-free.app/v1" ;
+      // const baseURL="https://0e15-2405-201-f00a-882c-64fd-eda5-d757-1116.ngrok-free.app/v1" ;
       const URL = `${baseURL}/auth/login`;
       console.log(`url=${URL}`);
       const response = await fetch(`${URL}`, {
@@ -44,6 +46,17 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json(); 
         console.log('Successful login', data);
+        const token = data.tokens.access.token; 
+        console.log(token);
+        localStorage.setItem('token', token); 
+        // const userId = data.user.id; 
+        // localStorage.setItem('userId', userId); 
+        // console.log(userId);
+        const refresh = data.tokens.access.token; 
+        console.log(refresh);
+        localStorage.setItem('refresh', refresh);
+        toast.success("Logged In ");
+        setCookie("islogin", "true");
         router.push('/');     
       } else {
         setErrorMessage('Incorrect username or password.');
@@ -93,7 +106,7 @@ const Login = () => {
 
           <div className="relative ml-32">
             <h2>
-              <Link href={`/forgot_pass`}>Forgot Password?</Link>
+              <Link href={`/forgot-password`}>Forgot Password?</Link>
             </h2>
           </div>
 
@@ -123,6 +136,7 @@ const Login = () => {
         </form>
         {errorMessage && <p className="text-red-500 mb-2">{errorMessage}</p>}
       </div>
+      <Toaster richColors />
     </div>
   );
 };

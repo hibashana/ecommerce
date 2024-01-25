@@ -29,7 +29,7 @@ button.primary-button {
 }
 
 .category_style:hover {
-    @apply bg-primary-color text-white;
+    @apply bg-primary-color text-white ;
 }
 
 .offer_style {
@@ -60,6 +60,10 @@ button.primary-button {
     @apply bg-white ;
 }
 
+.font-color {
+    color: var(--primary-color);
+}
+
 .primary {
     @layer components {
         .border-primary-color {
@@ -79,3 +83,5 @@ button.primary-button {
         background-color: var(--primary-color);
     }
 }
+
+
