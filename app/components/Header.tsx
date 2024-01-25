@@ -54,7 +54,7 @@ const Header = () => {
           </Link>
         </div>
         <div className="relative">
-        <Link href={"/"} className='hover:text-black cursor-pointer duration-200 relative group'> 
+        <Link href={"/addtoCart"} className='hover:text-black cursor-pointer duration-200 relative group'> 
           <FaShoppingCart />
           <div className="bg-red-600 text-white rounded-full absolute top-0 right-0 w-[18px] h-[18px] text-[12px] text-center">
             0

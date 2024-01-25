@@ -155,13 +155,24 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
         'Authorization': `Bearer ${token}`,
         "Cache-Control": "no-store" } });
       const data = await response.json();
-      toast.success("Product Added to cart");
-      console.log(response);
-      setCartStates((prevStates) => ({
-        ...prevStates,
-        [productId]: true  // Set the cart state for the specific product to true
-      }));
-      // Handle the cart response as needed
+      if (response.status === 200) {
+        toast.success("Product Added to cart");
+        console.log(response);
+        setCartStates((prevStates) => ({
+          ...prevStates,
+          [productId]: true  // Set the cart state for the specific product to true
+        }));
+        // Handle the cart response as needed
+      } else {
+        
+        toast.error("Failed to Add Product to cart");
+        console.error("Failed to Add" );
+        setCartStates((prevStates) => ({
+          ...prevStates,
+          [productId]: false  // Set the cart state for the specific product to false
+        }));
+      }
+      
     } catch (error) {
       console.error('Error while adding the product to cart:', error);
       setCartStates((prevStates) => ({
