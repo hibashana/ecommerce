@@ -47,7 +47,7 @@ const Login = () => {
         const data = await response.json(); 
         console.log('Successful login', data);
         const token = data.tokens.access.token; 
-        console.log(token);
+        // console.log(token);
         localStorage.setItem('token', token); 
         // const userId = data.user.id; 
         // localStorage.setItem('userId', userId); 
@@ -55,14 +55,26 @@ const Login = () => {
         const refresh = data.tokens.access.token; 
         console.log(refresh);
         localStorage.setItem('refresh', refresh);
+        // const userData=data.user;
+        // console.log(userData);
+
+        const userDetails = {
+          firstName: data.user.firstName,
+          lastName: data.user.lastName,
+        };
+        console.log(userDetails);
+        
+        setCookie('userDetails', JSON.stringify(userDetails));
+
         toast.success("Logged In ");
         setCookie("islogin", "true");
-        router.push('/');     
+        router.push('/');  
+        
       } else {
         setErrorMessage('Incorrect username or password.');
         console.error('Login failed');
-        console.log(formData.email);
-        console.log(formData.password);
+        // console.log(formData.email);
+        // console.log(formData.password);
         
       }
     } catch (error) {

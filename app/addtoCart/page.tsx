@@ -271,13 +271,15 @@ const Cart: React.FC = () => {
   };
 
   const removeFromCart = async (cartItemId: string): Promise<void> => {
+    const token = localStorage.getItem('token');
     const confirmDelete = window.confirm("Are you sure you want to delete the Product?");
     if (confirmDelete) {
         try {
           const URL = `${baseURL}/cart/removeFromCart?cartItemId=${cartItemId}`;
-          const response = await axios.delete(`${URL}`, {
+          const response = await axios.get(`${URL}`, {
             headers: {
-                cache: 'no-store',
+              'Authorization': `Bearer ${token}`,
+              "Cache-Control": 'no-store',
             },
           });
           if (response.status === 200) {
@@ -376,7 +378,7 @@ const calculateSubtotal = (): number => {
                             
                             <figure className="flex flex-row ">
                             <div 
-                                className="py-8 p-8  hover:text-red-700 bg-white text-gray-400 text-xs    cursor-pointer ">
+                                className="py-8 p-8  hover:text-red-700 bg-white text-gray-400 text-xs cursor-pointer " onClick={() =>removeFromCart(data.id)}>
                                  <ImCross />
                             </div>
                               <div className="block  w- h-20  overflow-hidden">
@@ -465,6 +467,7 @@ const calculateSubtotal = (): number => {
               </article>
             </aside>
           </div>
+          <Toaster richColors />
         </div>
       </section>
     </>

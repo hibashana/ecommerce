@@ -7,6 +7,7 @@ import { FaFacebookF } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { baseURL } from '@/utils/constants';
 import axios from 'axios';
+import { setCookie } from 'cookies-next';
 
 interface FormData {
   firstName: string;
@@ -73,6 +74,11 @@ const Signup: React.FC = () => {
 
       if (response.status === 201) {
         console.log('Successful registration', response.data);
+        const { firstName, lastName, email, address, phone } = formData;
+        setCookie('userDetails', JSON.stringify({ firstName, lastName, email, address, phone }), {
+          maxAge: 30 * 24 * 60 * 60, // 30 days expiration (adjust as needed)
+          path: '/', // cookie is accessible on the entire domain
+        });
         router.push('/');
       } else {
         setErrorMessage('Registration failed. Please check your details.');
