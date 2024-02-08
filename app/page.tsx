@@ -1,12 +1,12 @@
 
 
 import Signup from "./(auth)/signup/Sign_up";
-import Category from "./components/category/Category";
-import Offers from "./components/imageSlider/Offers";
-import Products from "./components/products/ProductList";
-// import PhoneCarousel from "./components/products/ProductList";
-import RecmdProduct from "./components/recommended/RecmdProduct";
-import TopCollection from "./components/topCollection/TopCollection";
+import Category from "./(components)/category/Category";
+import Offers from "./(components)/imageSlider/Offers";
+import Products from "./(components)/products/ProductList";
+// import PhoneCarousel from "./(components)/products/ProductList";
+import RecmdProduct from "./(components)/recommended/RecmdProduct";
+import TopCollection from "./(components)/topCollection/TopCollection";
 // import AddtoCart from "./components/addtoCart/pages";
 
 const phones = [

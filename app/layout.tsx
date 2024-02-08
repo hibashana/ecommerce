@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Offers from './components/imageSlider/Offers';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Offers from './(components)/imageSlider/Offers';
+import Header from './(components)/Header';
+import Footer from './(components)/Footer';
 // import Offer from './components/imageSlider/Offer';
 
 

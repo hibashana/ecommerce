@@ -114,6 +114,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { baseURL, imageURL } from '@/utils/constants';
 import { Toaster, toast } from 'sonner';
 import  {Product} from '@/types';
+import { useRouter } from 'next/navigation';
 
 // interface Product {
 //   id: number;
@@ -135,15 +136,27 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
   const [cartStates, setCartStates] = useState<{ [productId: number]: boolean }>({});
   const [prodct, setProducts] = useState<Product[]>([]);
 
+  const router=useRouter();
+
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  
+  const handleOnClick = (name: string) => {
+    router.push(`/productDetails/${name}`);
+  };
+
+  // const handleOnClick = (name: string) => {
+  //   router.push('/components/dummyProduct');
+  // };
 
   const addtoCart = async (productId: number): Promise<void> => {
 
     const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login');
+      return;
+    }
     try {
       // const response = await axios.get(
       //   `${baseURL}/cart/addToCart?productId=${productId}`,
@@ -162,7 +175,7 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
           ...prevStates,
           [productId]: true  // Set the cart state for the specific product to true
         }));
-        // Handle the cart response as needed
+       
       } else {
         
         toast.error("Failed to Add Product to cart");
@@ -204,8 +217,8 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
   };
 
   return (
-    <div className="flex flex-row">
-      <div className="w-full">
+    <div className="flex flex-row ">
+      <div className="w-full gap-3">
         <Slider {...settings}>
           {prodct.map((item, index) => (
             <div key={index} className="w-full pr-0 px-3">
@@ -223,7 +236,8 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
                   <img
                     src={item.imageUrl ? `${imageURL}${item.imageUrl}` : "https://media.ldlc.com/ld/products/00/04/65/15/LD0004651580_2.jpg"}
                     alt={item.name}
-                    className="mx-auto w-28 h-44 lg:object-cover object-cover justify-center mb-2 rounded-md group-hover:scale-105 duration-300"
+                    onClick={() => handleOnClick(item.name)}
+                    className="mx-auto cursor-pointer w-32 h-44 lg:object-cover object-cover justify-center mb-2 rounded-md group-hover:scale-105 duration-300"
                     onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                       const target = e.target as HTMLImageElement;
                       target.src = 'https://img.freepik.com/premium-photo/colourful-smokes-mobile-screen-image-generative-ai_849906-7067.jpg';

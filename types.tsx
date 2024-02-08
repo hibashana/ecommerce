@@ -14,9 +14,27 @@
     price: number;
     imageUrl: string;
     offerPercentage: number;
+    ProductImages: ProductImage[];
+  }
+
+  export interface CategoryItem {
+    id: number;
+    imageUrl: string;
+    name: string;
   }
   
+  export interface SubCategoryItem {
+    id: number;
+    imageUrl: string;
+    parentId: number;
+    name: string;
+  }
 
+  export interface ProductImage {
+    id: string;
+    imageUrl: string;
+    isThumbnail: boolean;
+  }
   export interface CartItem {
     id: string;
     cartId: string;
