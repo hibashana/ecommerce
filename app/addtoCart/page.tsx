@@ -244,7 +244,7 @@ import { ImCross } from "react-icons/im";
 import { Toaster, toast } from 'sonner';
 import axios from 'axios';
 
-const Cart: React.FC = () => {
+const Cart = () => {
   const [cartData, setCartData] = useState<CartData | null>(null);
 
   useEffect(() => {
@@ -334,13 +334,13 @@ const Cart: React.FC = () => {
                      }  
                  }; 
 
-const calculateSubtotal = (): number => {
-    if (!cartData) return 0;
+// const calculateSubtotal = (): number => {
+//     if (!cartData) return 0;
 
-    return cartData.cartItems.reduce((total, item) => {
-      return total + item.Product.price * item.quantity;
-    }, 0);
-  };
+//     return cartData.cartItems.reduce((total, item) => {
+//       return total + item.Product.price * item.quantity;
+//     }, 0);
+//   };
           
    
 
@@ -439,12 +439,14 @@ const calculateSubtotal = (): number => {
               </article>
             </main>
             <aside className="md:w-1/4 mt-6">
+            {cartData && (
               <article className="border border-gray-200 bg-white shadow-sm rounded mb-2 p-1 lg:p-2">
                 <h1 className="font-bold font-sans text-xl mb-2">Cart Total</h1>
                 <ul className="mb-5  p-2">
                   <li className="flex text-sm font-bold border-b mb-2 justify-between text-gray-600  ">
                     <span className="mb-2">Subtotal</span>
-                    <span>${calculateSubtotal()}</span>
+                    <span>{cartData.subTotal}</span>
+                    {/* <span>${calculateSubtotal()}</span> */}
                   </li>
                   <li className="flex justify-between  mb-1">
                     <span className="text-sm font-bold mb-2 ">Shipping</span>
@@ -457,7 +459,7 @@ const calculateSubtotal = (): number => {
                   </li>
                   <li className="text-lg font-bold border-t flex justify-between mt-3 pt-4">
                     <span>Total</span>
-                    <span className="font-color font-bold"></span>
+                    <span className="font-color font-bold">{cartData.subTotal}</span>
                   </li>
                 </ul>
 
@@ -465,6 +467,7 @@ const calculateSubtotal = (): number => {
                   Proceed To Checkout
                 </a>
               </article>
+               )}
             </aside>
           </div>
           <Toaster richColors />

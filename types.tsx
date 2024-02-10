@@ -17,6 +17,22 @@
     ProductImages: ProductImage[];
   }
 
+//   export interface ProductbyCategory {
+//     id: string;
+//     name: string;
+//     description: string | null;
+//     price: string;
+//     stockQuantity: number;
+//     offerPrice: string;
+//     offerPercentage: number;
+//     ProductCategories: {
+//         productId: string;
+//         categoryId: number;
+//     };
+//     imageUrl: string;
+// }
+
+
   export interface CategoryItem {
     id: number;
     imageUrl: string;
@@ -51,5 +67,7 @@
     userId: string;
     status: string;
     discount: string;
+    subTotal: string;
+    total: string;
     cartItems: CartItem[];
   }
