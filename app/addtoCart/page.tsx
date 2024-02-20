@@ -285,10 +285,10 @@ const Cart = () => {
           if (response.status === 200) {
             toast.success(`Deleted Successfully.`);
             console.log(`Product has been deleted.`);
-            getCartWithItems();
+            // getCartWithItems();
             
-          } else {
             
+          } else {          
             toast.error("Failed to delete Product");
             console.error("Failed to delete" );
           }
@@ -303,7 +303,7 @@ const Cart = () => {
       const response = await fetch(`${baseURL}/cart/increment?cartItemId=${cartItemId}`, {
         headers: {
           "Cache-Control": "no-store",
-        },
+        },  
              });
               if (response.status === 200) { 
                 console.log(`Product added.`);
@@ -316,7 +316,8 @@ const Cart = () => {
               }  
           };
 
-          const decrementQuantity = async (cartItemId: string): Promise<void> => {
+   
+    const decrementQuantity = async (cartItemId: string): Promise<void> => {
             try {
              const response = await fetch(`${baseURL}/cart/decrement?cartItemId=${cartItemId}`, {
                headers: {
@@ -406,7 +407,7 @@ const Cart = () => {
                             </button>
                             <input
                               type="number"
-                              className=" border  text-center w-full justify-center text-md flex items-center  outline-none "
+                              className=" border   text-center w-full justify-center text-md flex items-center  outline-none "
                               name="custom-input-number"
                               value={data.quantity}
                               readOnly

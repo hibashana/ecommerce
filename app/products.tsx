@@ -1,106 +1,165 @@
-import React,{ useState, useEffect } from 'react';
-import { GoHeartFill,GoHeart } from "react-icons/go";
-import { baseURL,imageURL } from '@/utils/constants';
-import { MdShare,MdCompareArrows} from "react-icons/md";
+import React, { useState ,useRef,useEffect} from 'react';
+import { GoHeartFill, GoHeart } from "react-icons/go";
+import { MdShare, MdCompareArrows } from "react-icons/md";
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner';
-import { Product} from "@/types";
+import { baseURL,imageURL } from '@/utils/constants';
+import { Product } from "@/types";
+import addtoCart from '@/app/action/cart';
+import getSubCategoryData from '@/app/action/subCategory'
+import MiniCart from './minicart/page';
+import { addtoWishlist } from './action/wishlist';
+import { getWishlist } from './action/wishlist';
 
+interface ProductsProps {
+    product: Product[];
+}
 
-const Products = () => {
+const Products: React.FC<ProductsProps> = ({ product }) => {
+    const router = useRouter();
+    const [miniCartVisible, setMiniCartVisible] = useState(false);
+    const [showOverlay, setShowOverlay] = useState(false);
 
-    const addtoCart = async (productId: number): Promise<void> => {
-        const router=useRouter();
-        const token = localStorage.getItem('token');
-        console.log(token);
-        
-        if (!token) {
-          router.push('/login');
-          return;
-        }
-        try {
-         
-          const response = await fetch(`${baseURL}/cart/addToCart?productId=${productId}`,{ headers: { 
-            'Authorization': `Bearer ${token}`,
-            "Cache-Control": "no-store" } });
-          const data = await response.json();
-          if (response.status === 200) {
+    // const miniCartRef = useRef<HTMLDivElement>(null);
+
+    // useEffect(() => {
+    //     // Function to handle clicks outside the mini cart
+    //     function handleClickOutside(event: MouseEvent) {
+    //         if (miniCartRef.current && !miniCartRef.current.contains(event.target as Node)) {
+    //             setMiniCartVisible(false); // Hide the mini cart if clicked outside
+    //         }
+    //     }
+
+    //     // Add event listener to detect clicks outside the mini cart
+    //     document.addEventListener('mousedown', handleClickOutside);
+
+    //     // Cleanup function to remove event listener
+    //     return () => {
+    //         document.removeEventListener('mousedown', handleClickOutside);
+    //     };
+    // }, []);
+
+    
+    const handleAddToCart = async (productId: number) => {
+        const status = await addtoCart(productId);
+        if (status === 200) {
             toast.success("Product Added to cart");
-            console.log(response);
-            router.push("/addtoCart")
-          } else {
-            
+            setMiniCartVisible(true);
+            setShowOverlay(true);
+        } else if (status === 401) {
+            router.push('/login');
+        } else {
             toast.error("Failed to Add Product to cart");
-            console.error("Failed to Add" );
-          }
-          
-        } catch (error) {
-          console.error('Error while adding the product to cart:', error);
         }
-      };
+    };
 
-    const [product, setProductData] = useState<Product[]>([]);
-  return (
+
+    
+//  const handleWishlist = async (productId: number) => {
+//         const status = await addtoWishlist(productId);
+//         if (status === 200) {
+//             toast.success("Product Added to wishlist");
+//             window.location.reload();
+//             // setMiniwishlistVisible(true);
+//         } else if (status === 401) {
+//             router.push('/login');
+//         } else {
+//             toast.error("Failed to Add Product to wishlist");
+//         }
+//       };
+   
+
+const handleWishlist = async (productId: number) => {
+    try {
+        const status = await addtoWishlist(productId);
+        if (status === 200) {
+            toast.success("Product added to wishlist");
+        } else if (status === 204) {
+            toast.success("Product removed from wishlist");
+        } else if (status === 401) {
+            router.push('/login');
+        } else {
+            toast.error("Failed to update wishlist");
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        toast.error("Failed to update wishlist");
+    }
+};
+
+
+return (
     <div>
-        <div className='flex flex-wrap justify-center'>
-     {product.map((product, index) => (
-        <div key={index} className='px-2 relative '>
-            <div className=''>
-            <div className="flex flex-col w-64  h-fit group pt-4 cursor-pointer relative">
-                <div className="bg-sky-50 w-full h-72 relative  ">
-                    {product.offerPercentage > 0 && (
-                        <p className="absolute rounded-full w-9 h-9 flex justify-center items-center text-white text-xs right-2 top-2" style={{ backgroundColor: '#f87171' }}>
-                            -{product.offerPercentage}%
-                        </p>
-                    )}
-                    <img
-                        src={product.imageUrl ? `${imageURL}${product.imageUrl}` : "https://i.blogs.es/7342c1/iphone-13-1-/840_560.jpg"}
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                        onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = 'https://img.freepik.com/premium-photo/colourful-smokes-mobile-screen-image-generative-ai_849906-7067.jpg';
-                        }}
-                    />
-                    <div className="absolute h-full w-full bg-black/60 flex flex-col items-center justify-center -bottom-10 group-hover:bottom-0 opacity-0 group-hover:opacity-95 transition-all duration-300">
-                        <button className="bg-white text-yellow-600 font-semibold py-2 px-6" onClick={() => addtoCart(product.id)}>Add to cart</button>
-                        <div className='flex flex-row text-center text-white gap-3 py-2 px-2'>
-                            <div className="flex  items-center">
-                                <MdShare />
-                                <div className="p-1">Share</div>
+        <div>
+        {showOverlay && <div className='bg-black opacity-40 fixed top-0 bottom-0 left-0 w-full h-full' />}
+        <div className='flex flex-wrap justify-center'>   
+            {product.map((prod, index) => (
+                
+                <div key={index} className='px-2 relative '>
+                            {showOverlay && <div className='bg-black/0 opacity-40 fixed top-0 bottom-0 left-0 w-full h-full' />}
+                    <div className=''>
+                        
+                        <div className="flex flex-col w-64  h-fit group pt-4 cursor-pointer relative">
+                            <div className="bg-sky-50 w-full h-72 relative  ">
+                                {prod.offerPercentage > 0 && (
+                                    <p className="absolute rounded-full w-9 h-9 flex justify-center items-center text-white text-xs right-2 top-2" style={{ backgroundColor: '#f87171' }}>
+                                        -{prod.offerPercentage}%
+                                    </p>
+                                )}
+                                <img
+                                    src={prod.imageUrl ? `${imageURL}${prod.imageUrl}` : "https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg "}
+                                    alt={prod.name}
+                                    className="w-full h-full object-cover"
+                                    onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                                        const target = e.target as HTMLImageElement;
+                                        target.src = 'https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg ';
+                                    }}
+                                />
+                                <div className="absolute h-full w-full bg-black/60 flex flex-col items-center justify-center -bottom-10 group-hover:bottom-0 opacity-0 group-hover:opacity-95 transition-all duration-300">
+                                    <button className="bg-white text-yellow-600 font-semibold py-2 px-6" onClick={() => handleAddToCart(prod.id)}>Add to cart</button>
+                                    <div className='flex flex-row text-center text-white gap-3 py-2 px-2'>
+                                        <div className="flex  items-center">
+                                            <MdShare />
+                                            <div className="p-1">Share</div>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <MdCompareArrows />
+                                            <div className="p-1">Compare</div>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <GoHeart className='text-lg font-semibold'
+                                              onClick={() => handleWishlist(prod.id)} />
+                                            <div className="p-1" >Like</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="flex items-center">
-                                <MdCompareArrows />
-                                <div className="p-1">Compare</div>
-                            </div>
-                            <div className="flex items-center">
-                                <GoHeart className='text-lg font-semibold' />
-                                <div className="p-1">Like</div>
+                            <div className="flex flex-col px-3 gap-1 py-1 relative z-10" style={{ backgroundColor: '#F4F5F7' }}>
+                                <h2 className="text-lg font-semibold">{prod.name}</h2>
+                                <p className="text-gray-600 text-xs">{prod.description}</p>
+                                <div className="flex flex-row gap-3">
+                                    {prod.offerPercentage > 0 ? (
+                                        <p className="font-bold">${prod.offerPrice}</p>
+                                    ) : (
+                                        <p className="text-black font-bold">${prod.price}</p>
+                                    )}
+                                    {prod.offerPercentage > 0 && (
+                                        <p className="text-slate-500 line-through">${prod.price}</p>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col px-3 gap-1 py-1 relative z-10" style={{ backgroundColor: '#F4F5F7' }}>
-                    <h2 className="text-lg font-semibold">{product.name}</h2>
-                    <p className="text-gray-600 text-xs">{product.description}</p>
-                    <div className="flex flex-row gap-3">
-                        {product.offerPercentage > 0 ? (
-                            <p className="font-bold">${product.offerPrice}</p>
-                        ) : (
-                            <p className="text-black font-bold">${product.price}</p>
-                        )}
-                        {product.offerPercentage > 0 && (
-                            <p className="text-slate-500 line-through">${product.price}</p>
-                        )}
-                    </div>
-                </div>
-            </div>
-            </div>
+            ))}
         </div>
-    ))}
-</div>
+        </div>
+        {miniCartVisible && <div className='absolute top-0 left-0 w-full h-full '><MiniCart /></div>}
     </div>
-  )
+)   
 }
 
-export default Products
+export default Products;
+
+
+

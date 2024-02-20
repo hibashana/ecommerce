@@ -106,7 +106,7 @@
 
 import { IoCartOutline, IoCartSharp } from "react-icons/io5";
 import { IoMdHeartEmpty } from "react-icons/io";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC } from "react";
 import axios from "axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -132,7 +132,7 @@ interface ProductsProps {
 }
 
 
-const Products: React.FC<ProductsProps> = ({ products }) => {
+const Products:FC<ProductsProps> = ({ products }) => {
   const [cartStates, setCartStates] = useState<{ [productId: number]: boolean }>({});
   const [prodct, setProducts] = useState<Product[]>([]);
 
