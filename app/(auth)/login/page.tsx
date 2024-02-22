@@ -46,8 +46,7 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json(); 
         console.log('Successful login', data);
-        const token = data.tokens.access.token; 
-        window.location.reload();
+        const token = data.tokens.access.token;
         // console.log(token);
         localStorage.setItem('token', token); 
         // const userId = data.user.id; 

@@ -18,7 +18,10 @@ import { getCookie, deleteCookie } from 'cookies-next';
 import { PropagateLoader } from 'react-spinners';
 import { getBadgeCount } from '../action/getbadgeCount';
 import { Search } from '../action/search';
+
+import MiniWishlist from '../miniwishlist/page';
 import MiniCart from '../minicart/page';
+import getSubCategoryData from '../action/subCategory';
 
 const Header = () => {
   const router = useRouter();
@@ -28,14 +31,11 @@ const Header = () => {
   const [searchName, setSearchName] = useState('');
   const [badgecount, setBadgeCount] = useState<{ cartCount: number, wishlistCount: number } | null>(null);
   const [showMiniCart, setShowMiniCart] = useState(false);
-  // const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
+  const [showMiniWishlist, setShowMiniCWishlist] = useState(false);
+ 
   const menuRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
-
-  // const toggleDrawer = () => {
-  //   setIsDrawerOpen(prevState => !prevState);
-  // };
+  const wishlistRef = useRef<HTMLDivElement>(null); // Add reference for miniwishlist
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -50,17 +50,24 @@ const Header = () => {
     getbadgecount();
   }, []);
 
+
   const handleSearch = async () => {
     try {
-      const searchResults = await Search(searchName); 
-      console.log(searchResults); 
+      // const searchResults = await getSubCategoryData(categoryId,searchName); 
+      // console.log(searchResults); 
     } catch (error) {
       console.error('Error fetching search results:', error);
     }
   };
 
+
+
   const toggleMiniCart = () => {
     setShowMiniCart(!showMiniCart);
+  };
+
+  const toggleMiniWishlist = () => {
+    setShowMiniCWishlist(!showMiniWishlist);
   };
 
   const handleLogout = () => {
@@ -75,6 +82,8 @@ const Header = () => {
       window.location.reload();
     }
   };
+  
+
 
   const getbadgecount = async () => {
     try {
@@ -104,6 +113,9 @@ const Header = () => {
       if (showMiniCart && !menuRef.current?.contains(event.target as Node)) {
         setShowMiniCart(false);
       }
+      if (showMiniWishlist && !wishlistRef.current?.contains(event.target as Node)) {
+        setShowMiniCWishlist(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
@@ -111,7 +123,7 @@ const Header = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showMiniCart]);
+  }, [showMiniCart, showMiniWishlist]);
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between px-6 sm:px-10 lg:px-16 h-28 sm:h-20">
@@ -135,7 +147,7 @@ const Header = () => {
           type="submit"
           className=" absolute  end-0 top-1/2 transform -translate-y-1/2 primary-button font-medium rounded-full p-3"
         >
-          <GoSearch className="text-white text-xl" />
+          <GoSearch className="text-white text-xl"/>
         </button>
       </div>
 
@@ -178,22 +190,24 @@ const Header = () => {
         {badgecount && (
           <>
             <div className="relative">
-              <Link href={"/wishlist"} className='hover:text-black cursor-pointer duration-200 relative group'>
+              <div 
+              onClick={toggleMiniWishlist}
+              className='hover:text-black cursor-pointer duration-200 relative group'>
                 <FiHeart />
                 <div className="bg-red-600 rounded-full absolute top-0 text-white right-0 w-[18px] h-[18px] text-[12px] text-center">
                   {badgecount.wishlistCount}
                 </div>
-              </Link>
+                {showMiniWishlist && <div className='absolute' ref={wishlistRef}><MiniWishlist/></div>}
+              </div>
             </div>
             <div className="relative" >
               <div
-                onClick={() => setShowMiniCart(true)}
                 className='hover:text-black cursor-pointer duration-200 relative group'>
                 <FaShoppingCart  onClick={toggleMiniCart}/>
                 <div className="bg-red-600 text-white rounded-full absolute top-0 right-0 w-[18px] h-[18px] text-[12px] text-center">
                   {badgecount.cartCount}
                 </div>
-                {showMiniCart && <div className='absolute' ref={menuRef}><MiniCart  /></div>}
+                {showMiniCart && <div className='absolute' ref={menuRef}><MiniCart/></div>}
               </div>
               
             </div>

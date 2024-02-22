@@ -2,26 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import { baseURL, imageURL } from '@/utils/constants';
-import { CategoryItem,SubCategoryItem } from "@/types";
+import { CategoryItem, SubCategoryItem } from "@/types";
 import { useRouter } from 'next/navigation';
-
-// interface CategoryItem {
-//   id: number;
-//   imageUrl: string;
-//   name: string;
-// }
-
-// interface SubCategoryItem {
-//   id: number;
-//   imageUrl: string;
-//   parentId: number;
-//   name: string;
-// }
 
 const Category = () => {
   const [categoryData, setCategoryData] = useState<CategoryItem[]>([]);
   const [subCategoryData, setSubCategoryData] = useState<SubCategoryItem[]>([]);
-  const router=useRouter();
+  const [currentParentId, setCurrentParentId] = useState<number | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     getCategory();
@@ -31,7 +19,6 @@ const Category = () => {
     try {
       const response = await fetch(`${baseURL}/category?parentId=1`, { cache: 'no-store' });
       const data = await response.json();
-      console.log(response);
       setCategoryData(data.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -43,6 +30,7 @@ const Category = () => {
       const response = await fetch(`${baseURL}/category?parentId=${parentId}`, { cache: 'no-store' });
       const data = await response.json();
       setSubCategoryData(data.data);
+      setCurrentParentId(parentId);
     } catch (error) {
       console.error('Error fetching subcategories:', error);
     }
@@ -52,46 +40,52 @@ const Category = () => {
     getSubCategory(parentId);
   };
 
-  const handleCategoryLeave = () => {
+  const handleSubCategoryLeave = () => {
     setSubCategoryData([]);
+    setCurrentParentId(null);
   };
 
-  const handleonclick = (parentId: number) => {
+  const handleOnClick = (parentId: number) => {
     router.push(`/productByCategory/${parentId}`);
   };
 
-
   return (
-    <div className="flex items-center flex-row justify-around pb-4 pt-1">
-      <div id="slider" className="flex flex-row  gap-4 p-1 ">
-      {/* w-full whitespace-nowrap scroll-smooth hover:overflow-x-scroll scroll */}
-        {categoryData.map((category, index) => (
-           <div key={index} >
-          <div
-            key={index}
-            className="flex gap-2 px-4 p-3 w-auto justify-center text-sm rounded-xl cursor-pointer category_style:hover category_style"
-            onMouseOver={() => handleCategoryHover(category.id)}
-            onMouseLeave={handleCategoryLeave}
-            onClick={() => handleonclick(category.id)}
-          >
-            <img
-              src={`${imageURL}${category.imageUrl}`}
-              className="w-7 h-7 object-cover"
-            />
-            <p>{category.name}</p>
-            
-          </div>
-          <div className="">
-            {subCategoryData.length > 0 && category.id === subCategoryData[0].parentId && (
-              <ul className="boder border-2 p-2 rounded-xl cursor-pointer ">
+    <div className="relative">
+      <div className="flex items-center flex-row justify-around pb-4 pt-1">
+        <div id="slider" className="flex flex-row gap-4 p-1 relative">
+          {categoryData.map((category, index) => (
+            <div key={index}>
+              <div
+                key={index}
+                className="flex gap-2 px-4 p-3 w-auto justify-center text-sm rounded-xl cursor-pointer category_style:hover category_style"
+                onMouseEnter={() => handleCategoryHover(category.id)}
+                onMouseLeave={handleSubCategoryLeave}
+                onClick={() => handleOnClick(category.id)}
+              >
+                <img
+                  src={`${imageURL}${category.imageUrl}`}
+                  className="w-7 h-7 object-cover"
+                />
+                <p>{category.name}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        {subCategoryData.length > 0 && (
+          <div className="absolute top-20 left-0 w-full bg-white shadow-lg z-10">
+            <div className="mx-auto max-w-screen-xl px-2 py-1 text-sm text-gray-500 dark:text-gray-400 md:grid-cols-3 md:px-6">
+              <ul className="">
                 {subCategoryData.map((subCategory, subIndex) => (
-                <li className="hover:text-slate-500 hover:underline" key={subIndex}>{subCategory.name}</li>
+                  <li key={subIndex}>
+                    <div className="cursor-pointer py-1 px-3 hover:text-gray-900 hover:underline text-base">
+                      {subCategory.name} 
+                    </div>
+                  </li>
                 ))}
               </ul>
-            )}
             </div>
-      </div>
-        ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -63,7 +63,7 @@ const ProductbyCategory = () => {
         try {
             const { data, status } = await getSubCategoryData(categoryId);
             if (status === 200) {
-                setProductData(data.data); // Assuming `data` contains the product data directly
+                setProductData(data.data); 
             } else {
                 console.error('Error fetching subcategory. Status:', status);
             }

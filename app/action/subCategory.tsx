@@ -2,7 +2,7 @@ import { baseURL } from "@/utils/constants";
 
 const getSubCategoryData = async (categoryId: number) => {
     try {
-        const response = await fetch(`${baseURL}/product-category?categoryId=${categoryId}`, { cache: 'no-store' });
+        const response = await fetch(`${baseURL}/product-category?categoryId=${categoryId}&name=${name}`, { cache: 'no-store' });
         const data = await response.json();
         console.log(data);
         return { data, status: response.status }; 

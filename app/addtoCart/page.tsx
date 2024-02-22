@@ -240,33 +240,51 @@
 import React, { useEffect, useState } from "react";
 import { imageURL, baseURL } from "@/utils/constants";
 import { CartData, CartItem, Product } from "@/types";
+import getCartWithItems from "../action/getCartWithItems";
+import { useRouter } from 'next/navigation';
 import { ImCross } from "react-icons/im";
 import { Toaster, toast } from 'sonner';
 import axios from 'axios';
 
 const Cart = () => {
   const [cartData, setCartData] = useState<CartData | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    getCartWithItems();
+    getCart();
   }, []);
 
-  const getCartWithItems = async (): Promise<void> => {
-    const token = localStorage.getItem('token');
+  // const getCartWithItems = async (): Promise<void> => {
+  //   const token = localStorage.getItem('token');
 
+  //   try {
+  //     const response = await fetch(`${baseURL}/cart/userCartWithItems`, {
+  //       headers: {
+  //         'Authorization': `Bearer ${token}`,
+  //         "Cache-Control": "no-store",
+  //       },
+  //     });
+  //     const data = await response.json();
+  //     console.log(token);
+  //     console.log(response);
+  //     setCartData(data.data);
+  //   } catch (error) {
+  //     console.error('Error fetching products:', error);
+  //   }
+  // };
+
+  const getCart = async () => {
     try {
-      const response = await fetch(`${baseURL}/cart/userCartWithItems`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          "Cache-Control": "no-store",
-        },
-      });
-      const data = await response.json();
-      console.log(token);
-      console.log(response);
-      setCartData(data.data);
+      const { data, status } = await getCartWithItems();
+      if (status === 200) {
+        setCartData(data.data);
+      } else if (status === 401) {
+        router.push('/login');
+      } else {
+        console.error('Error fetching cart data. Status:', status);
+      }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('Error fetching cart data:', error);
     }
   };
 
@@ -307,7 +325,7 @@ const Cart = () => {
              });
               if (response.status === 200) { 
                 console.log(`Product added.`);
-                getCartWithItems();     
+                getCart();     
               } else {
                 console.error("Failed to add" );
               }
@@ -326,7 +344,7 @@ const Cart = () => {
                     });
                      if (response.status === 200) { 
                        console.log(`Product removed.`);
-                       getCartWithItems();     
+                       getCart();     
                      } else {
                        console.error("Failed to remove" );
                      }

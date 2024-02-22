@@ -1,6 +1,6 @@
 
 
-import Signup from "./(auth)/signup/Sign_up";
+// import Signup from "./(auth)/signup/Sign_up";
 import Category from "./(components)/category/Category";
 import Offers from "./(components)/imageSlider/Offers";
 import Products from "./(components)/products/ProductList";
@@ -85,6 +85,7 @@ const phones = [
 export default function Home(){
     return(
         <div className="px-2">
+          
             {/* <div className="scroll-auto"> */}
                 <Category />
             {/* </div> */}

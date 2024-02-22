@@ -73,7 +73,20 @@ button.primary-button {
     border-radius: 15px;
     background-color: white;
     border: 1px solid gray;
+    z-index: 1000; 
   }
+  
+  /* .dropDownProfile {
+    position: absolute;
+    top: calc(100% + 10px); Adjust the distance from the top
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000; Ensure the dropdown appears above other content
+  } */
+  
   
   .dropDownProfile::before {
     content: '';
