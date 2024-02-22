@@ -93,7 +93,7 @@ const MiniCart = () => {
               <tbody className="text-center">
                 {cartData?.cartItems.map((data: CartItem, index: number) => (
                   <tr className="border-b" key={data.id}>
-                    <td className="w-1/4 pb-1 pt-3  pb-2">
+                    <td className="w-1/4 pb-1 pt-3">
                       <div className="flex flex-row gap-1 items-center">
                         <div className="block w-24 h-28 rounded-md overflow-hidden">
                           <img src={`${imageURL}${data.Product.imageUrl}`} alt={data.Product.name} className="w-full h-full object-cover" />
