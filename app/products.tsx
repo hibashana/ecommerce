@@ -44,8 +44,8 @@ const Products: React.FC<ProductsProps> = ({ product }) => {
         const status = await addtoCart(productId);
         if (status === 200) {
             toast.success("Product Added to cart");
-            setMiniCartVisible(true);
-            setShowOverlay(true);
+            // setMiniCartVisible(true);
+            // setShowOverlay(true);
         } else if (status === 401) {
             router.push('/login');
         } else {
@@ -154,7 +154,8 @@ return (
             ))}
         </div>
         </div>
-        {miniCartVisible && <div className='absolute top-0 left-0 w-full h-full '><MiniCart /></div>}
+        <Toaster richColors />
+        {/* {miniCartVisible && <div className='absolute top-0 left-0 w-full h-full '><MiniCart /></div>} */}
     </div>
 )   
 }

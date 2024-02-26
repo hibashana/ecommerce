@@ -17,7 +17,7 @@ const MiniCart = () => {
   const router = useRouter();
 
   const handleViewCartClick = () => {
-    setShowMiniCart(false); // Close the mini cart when "VIEW AND EDIT CART" is clicked
+    setShowMiniCart(false); 
   };
 
   const getCart = async () => {
@@ -78,10 +78,13 @@ const MiniCart = () => {
       console.error('Error while deleting products:', error);
     }
   };
+  
 
   useEffect(() => {
     getCart();
   }, []);
+
+  
 
   return (
     <div className="fixed top-0 right-0 z-50 w-96 bg-gray-50 h-screen overflow-y-auto shadow-lg">
@@ -150,14 +153,14 @@ const MiniCart = () => {
                 </div>
               )}
               <div className="flex pt-5 justify-center">
-                <Link href={"/addtoCart"}>
-                  <button
-                    className="text-white bg-primary-color hover:bg-blue-800 p-2 rounded-lg text-sm"
-                    onClick={handleViewCartClick}
-                  >
+                <button
+                  className="text-white bg-primary-color hover:bg-blue-800 p-2 rounded-lg text-sm"
+                  onClick={handleViewCartClick}
+                >
+                  <Link href={"/addtoCart"}>
                     VIEW AND EDIT CART
-                  </button>
-                </Link>
+                  </Link>
+                </button>
               </div>
             </div>
           </div>

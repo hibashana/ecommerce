@@ -17,7 +17,7 @@ import { GoListUnordered } from "react-icons/go";
 import { getCookie, deleteCookie } from 'cookies-next';
 import { PropagateLoader } from 'react-spinners';
 import { getBadgeCount } from '../action/getbadgeCount';
-import { Search } from '../action/search';
+import Search from '../action/search';
 
 import MiniWishlist from '../miniwishlist/page';
 import MiniCart from '../minicart/page';
@@ -51,15 +51,10 @@ const Header = () => {
   }, []);
 
 
-  const handleSearch = async () => {
-    try {
-      // const searchResults = await getSubCategoryData(categoryId,searchName); 
-      // console.log(searchResults); 
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-    }
+  const handleSearch = () => {
+    // Navigate to the search page with the search query
+    router.push(`/searchpage?name=${searchName}`);
   };
-
 
 
   const toggleMiniCart = () => {

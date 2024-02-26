@@ -72,7 +72,7 @@ const Category = () => {
           ))}
         </div>
         {subCategoryData.length > 0 && (
-          <div className="absolute top-20 left-0 w-full bg-white shadow-lg z-10">
+          <div className="absolute top-14 left-0 w-full bg-white p-2 shadow-lg z-10">
             <div className="mx-auto max-w-screen-xl px-2 py-1 text-sm text-gray-500 dark:text-gray-400 md:grid-cols-3 md:px-6">
               <ul className="">
                 {subCategoryData.map((subCategory, subIndex) => (
