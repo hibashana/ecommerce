@@ -4,21 +4,23 @@ import { MdShare, MdCompareArrows } from "react-icons/md";
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner';
 import { baseURL,imageURL } from '@/utils/constants';
-import { Product } from "@/types";
+import { Product ,ProductbyCategory} from "@/types";
 import addtoCart from '@/app/action/cart';
 import getSubCategoryData from '@/app/action/subCategory'
 import MiniCart from './minicart/page';
 import { addtoWishlist } from './action/wishlist';
 import { getWishlist } from './action/wishlist';
+import { Rating } from "@smastrom/react-rating";
 
 interface ProductsProps {
-    product: Product[];
+    product: ProductbyCategory[];
 }
 
 const Products: React.FC<ProductsProps> = ({ product }) => {
     const router = useRouter();
     const [miniCartVisible, setMiniCartVisible] = useState(false);
     const [showOverlay, setShowOverlay] = useState(false);
+    const [products, setProducts] = useState<ProductbyCategory[]>([]);
 
     // const miniCartRef = useRef<HTMLDivElement>(null);
 
@@ -87,7 +89,6 @@ const handleWishlist = async (productId: number) => {
     }
 };
 
-
 return (
     <div>
         <div>
@@ -137,6 +138,9 @@ return (
                             <div className="flex flex-col px-3 gap-1 py-1 relative z-10" style={{ backgroundColor: '#F4F5F7' }}>
                                 <h2 className="text-lg font-semibold">{prod.name}</h2>
                                 <p className="text-gray-600 text-xs">{prod.description}</p>
+                                <div className="flex flex-col">
+                    <Rating style={{ maxWidth: 100 }} value={parseFloat(prod.Review?.averageRating || "0")} readOnly />
+                  </div>
                                 <div className="flex flex-row gap-3">
                                     {prod.offerPercentage > 0 ? (
                                         <p className="font-bold">${prod.offerPrice}</p>
@@ -147,6 +151,7 @@ return (
                                         <p className="text-slate-500 line-through">${prod.price}</p>
                                     )}
                                 </div>
+                                
                             </div>
                         </div>
                     </div>

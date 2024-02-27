@@ -195,7 +195,7 @@ const Header = () => {
                 {showMiniWishlist && <div className='absolute' ref={wishlistRef}><MiniWishlist/></div>}
               </div>
             </div>
-            <div className="relative" >
+            <div className="relative">
               <div
                 className='hover:text-black cursor-pointer duration-200 relative group'>
                 <FaShoppingCart  onClick={toggleMiniCart}/>

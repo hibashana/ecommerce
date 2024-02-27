@@ -17,6 +17,7 @@ import addtoCart from '@/app/action/cart';
 import fetchCategoryData from '@/app/action/productlist';
 import getSubCategoryData from '@/app/action/subCategory';
 import Products from '@/app/products';
+import { Rating } from "@smastrom/react-rating";
 
 // import { addtoCart }from "@/app/action/get-cart"
 // import Products from '@/app/products';
