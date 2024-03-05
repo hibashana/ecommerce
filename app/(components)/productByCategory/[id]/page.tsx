@@ -17,17 +17,22 @@ import addtoCart from '@/app/action/cart';
 import fetchCategoryData from '@/app/action/productlist';
 import getSubCategoryData from '@/app/action/subCategory';
 import Products from '@/app/products';
+import type { ProductbyCategory } from '@/types';
 import { Rating } from "@smastrom/react-rating";
 
 // import { addtoCart }from "@/app/action/get-cart"
 // import Products from '@/app/products';
 
 
+// interface ProductsProps {
+//     product: ProductbyCategory[];
+// }
+
 
 const ProductbyCategory = () => {
     const [categoryData, setCategoryData] = useState<string | null>(null);
     const [subCategoryData, setSubCategoryData] = useState<SubCategoryItem[]>([]);
-    const [product, setProductData] = useState<Product[]>([]);
+    const [product, setProductData] = useState<ProductbyCategory[]>([]);
 
     useEffect(() => {
         getCategoryData();

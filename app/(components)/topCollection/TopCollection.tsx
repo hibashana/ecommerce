@@ -91,13 +91,17 @@ const ProductPage: React.FC<ProductProps> = ({ product }) => {
                   <h1 className="text-sm font-bold">{product.name}</h1>
                   <p className="text-xs text-gray-700 mt-1">In Stock: {product.stockQuantity}</p>
                   <div className="flex flex-col items-center">
-                    <Rating style={{ maxWidth: 250 }} value={parseFloat(product.Review?.averageRating || "0")} readOnly />
+                         {parseFloat(product.Review?.averageRating || "0") > 0 && (
+                                        <div className="flex flex-col">
+                                            <Rating style={{ maxWidth: 100 }} value={parseFloat(product.Review?.averageRating || "0")} readOnly />
+                                        </div>
+                         )}
                   </div>
                 </div>
-                <div className="flex flex-col items-end">
+                <div className="flex flex-col items-end p-2">
                   <span className="text-sm text-slate-400 line-through">${product.price}</span>
                   <span className="text-sm font-bold">${product.offerPrice}</span>
-                  <span className="absolute bottom-3 right-2 cursor-pointer" onClick={() => addtoCart(product.id.toString())}>
+                  <span className="absolute  bottom-4 right-3 cursor-pointer" onClick={() => addtoCart(product.id.toString())}>
                     {cartStates[product.id] ? <IoCartSharp /> : <IoCartOutline />}
                   </span>
                 </div>

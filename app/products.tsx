@@ -139,7 +139,12 @@ return (
                                 <h2 className="text-lg font-semibold">{prod.name}</h2>
                                 <p className="text-gray-600 text-xs">{prod.description}</p>
                                 <div className="flex flex-col">
-                    <Rating style={{ maxWidth: 100 }} value={parseFloat(prod.Review?.averageRating || "0")} readOnly />
+                    {/* <Rating style={{ maxWidth: 100 }} value={parseFloat(prod.Review?.averageRating || "0")} readOnly /> */}
+                    {parseFloat(prod.Review?.averageRating || "0") > 0 && (
+                                        <div className="flex flex-col">
+                                            <Rating style={{ maxWidth: 100 }} value={parseFloat(prod.Review?.averageRating || "0")} readOnly />
+                                        </div>
+                                    )}
                   </div>
                                 <div className="flex flex-row gap-3">
                                     {prod.offerPercentage > 0 ? (

@@ -10,10 +10,14 @@ import { Toaster, toast } from 'sonner';
 import { imageURL } from "@/utils/constants";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
+import { useRef } from "react";
 
 const MiniCart = () => {
   const [cartData, setCartData] = useState<CartData | null>(null);
   const [showMiniCart, setShowMiniCart] = useState(false);
+  const miniCartRef = useRef<HTMLDivElement>(null);
+  const viewCartButtonRef = useRef<HTMLButtonElement>(null);
+  
   const router = useRouter();
 
   const handleViewCartClick = () => {
@@ -82,12 +86,23 @@ const MiniCart = () => {
 
   useEffect(() => {
     getCart();
+    // Add event listener to detect clicks outside of MiniCart
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
   }, []);
 
-  
+  const handleClickOutside = (event: MouseEvent) => {
+    // Close MiniCart if clicked outside of it
+    if (miniCartRef.current && !miniCartRef.current.contains(event.target as Node)) {
+      setShowMiniCart(false);
+    }
+  };
+
 
   return (
-    <div className="fixed top-0 right-0 z-50 w-96 bg-gray-50 h-screen overflow-y-auto shadow-lg">
+    <div ref={miniCartRef} className="fixed top-0 right-0 z-50 w-96 bg-gray-50 h-screen overflow-y-auto shadow-lg">
       <div className='p-3'>
         <h1 className='border-b-2 pt-1 pb-5 text-xl font-semibold'>Shopping Cart</h1>
         <div className="pb-28">
@@ -111,7 +126,7 @@ const MiniCart = () => {
                         <button
                           data-action="decrement"
                           className="border hover:bg-gray-100 bg-white rounded-l cursor-pointer outline-none h-8 w-8 flex items-center justify-center"
-                          onClick={() => decrementCart(data.id)}
+                          onClick={(e) => { e.stopPropagation(); decrementCart(data.id); }}
                         >
                           <span className="text-4xl font-thin">-</span>
                         </button>
@@ -124,7 +139,8 @@ const MiniCart = () => {
                         />
                         <button
                           className="border bg-white hover:bg-gray-100 rounded-r cursor-pointer h-8 w-8 flex items-center justify-center"
-                          onClick={() => incrementCart(data.id)}
+                          onClick={(e) => { e.stopPropagation(); incrementCart(data.id); }}
+                          // onClick={() => incrementCart(data.id)}
                         >
                           <span className="text-2xl font-thin">+</span>
                         </button>
@@ -135,7 +151,8 @@ const MiniCart = () => {
                       <div>
                         <div
                           className="p-2 rounded-full hover:text-red-700 bg-white text-gray-400 text-xs cursor-pointer"
-                          onClick={() => removeCart(data.id)}
+                          onClick={(e) => { e.stopPropagation(); removeCart(data.id); }}
+                          // onClick={() => removeCart(data.id)}
                         >
                           <ImCross />
                         </div>
@@ -153,14 +170,15 @@ const MiniCart = () => {
                 </div>
               )}
               <div className="flex pt-5 justify-center">
-                <button
-                  className="text-white bg-primary-color hover:bg-blue-800 p-2 rounded-lg text-sm"
-                  onClick={handleViewCartClick}
-                >
-                  <Link href={"/addtoCart"}>
-                    VIEW AND EDIT CART
-                  </Link>
-                </button>
+              <button
+  ref={viewCartButtonRef}
+  className="text-white bg-primary-color hover:bg-blue-800 p-2 rounded-lg text-sm"
+  onClick={handleViewCartClick}
+>
+  <Link href={"/addtoCart"}>
+    VIEW AND EDIT CART
+  </Link>
+</button>
               </div>
             </div>
           </div>

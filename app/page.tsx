@@ -1,7 +1,9 @@
 
 
 // import Signup from "./(auth)/signup/Sign_up";
+import Sidebar from "./(auth)/sidebar/page";
 import Category from "./(components)/category/Category";
+import DropCategory from "./(components)/dropdownCategory/DropCategory";
 import Offers from "./(components)/imageSlider/Offers";
 import Products from "./(components)/products/ProductList";
 // import PhoneCarousel from "./(components)/products/ProductList";
@@ -87,13 +89,15 @@ export default function Home(){
         <div className="px-2">
           
             {/* <div className="scroll-auto"> */}
-                <Category />
+                {/* <Category /> */}
+                <DropCategory/>
             {/* </div> */}
             <Offers/>
            
             <Products/>
             <RecmdProduct />
             <TopCollection/> 
+           
             
             {/* <AddtoCart/> */}
           {/* <PhoneCarousel phones={phones} /> */}

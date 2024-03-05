@@ -53,30 +53,30 @@ const Offers = () => {
     { id: 2, img: "/macbook-.jpg", heading: "New Collection", mainTitle: "Apple MacBook Pro 16", buttonLabel: "Start Shopping" },
   ];
 
-  return (
-    <div className='flex'>
-      {/* <div className='grid grid-cols-1 md:grid-cols-3  lg:grid-cols-4'> */}
-          {/* flex xs:flex-col md:flex-row xl:flex-row 2xl:flex-col */}
-      {/* Slide Component */}
-      <div className='col-span-1 lg: image__slider__container'>
-        <Slider {...settings}>
-          {slideData.map((item) => (
-            <Slide
-              key={item.id}
-              img={item.img}
-              title={item.title}
-              mainTitle={item.mainTitle}
-              subTitle={item.subTitle}
-            />
-          ))}
-        </Slider>
-      </div>
+  // return (
+  //   <div className='flex'>
+  //     {/* <div className='grid grid-cols-1 md:grid-cols-3  lg:grid-cols-4'> */}
+  //         {/* flex xs:flex-col md:flex-row xl:flex-row 2xl:flex-col */}
+  //     {/* Slide Component */}
+  //     <div className='col-span-1 lg: image__slider__container'>
+  //       <Slider {...settings}>
+  //         {slideData.map((item) => (
+  //           <Slide
+  //             key={item.id}
+  //             img={item.img}
+  //             title={item.title}
+  //             mainTitle={item.mainTitle}
+  //             subTitle={item.subTitle}
+  //           />
+  //         ))}
+  //       </Slider>
+  //     </div>
     
 
       {/* Second Column */}
-      <div className='ml-2 mx-8 w-4/5 '>
+      {/* <div className='ml-2 mx-8 w-4/5 '> */}
         {/* First container */}
-        <div className='bg-neutral-100 h-48 rounded-xl flex justify-center items-center'>
+        {/* <div className='bg-neutral-100 h-48 rounded-xl flex justify-center items-center'>
           <div>
             <h2 className='text-2xl md:text-lg lg:text-lg font-bold font-serif leading-tight'>
               Sades <br />Headset
@@ -93,10 +93,10 @@ const Offers = () => {
             </p>
           </div>
           <img src='/Headset.png' alt='Product Image' className='ml-8 w-32 h-32 rounded-full' />
-        </div>
+        </div> */}
 
         {/* Second container */}
-        <div className='bg-neutral-100 rounded-xl h-44 flex justify-center items-center mt-4'>
+        {/* <div className='bg-neutral-100 rounded-xl h-44 flex justify-center items-center mt-4'>
           <div>
             <h2 className='text-2xl md:text-lg lg:text-lg font-bold font-serif leading-tight'>
               Asus <br />Zenbook
@@ -113,11 +113,11 @@ const Offers = () => {
             </p>
           </div>
           <img src='/zenbook.png' alt='Product Image' className='ml-8 w-32 h-32 rounded-full' />
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
 
       {/* Third Column */}
-      <div className='col-span-3 pb-5 '>
+      {/* <div className='col-span-3 pb-5 '>
         <img
           src="/computer-laptop-macbook-night.jpg"
           alt="Product Image"
@@ -137,9 +137,31 @@ const Offers = () => {
           </Slider>
           </div>
         
-      </div>
-    </div>
+      </div> */}
+    {/* </div>
   );
-};
+}; */}
 
+
+return (
+  <div className='flex'>
+    {/* <div className='grid grid-cols-1 md:grid-cols-3  lg:grid-cols-4'> */}
+        {/* flex xs:flex-col md:flex-row xl:flex-row 2xl:flex-col */}
+    {/* Slide Component */}
+    <div className='w-full h-1/5'>
+      <Slider {...settings}>
+        {slideData.map((item) => (
+          <Slide
+            key={item.id}
+            img={item.img}
+            title={item.title}
+            mainTitle={item.mainTitle}
+            subTitle={item.subTitle}
+          />
+        ))}
+      </Slider>
+    </div>
+    </div>
+);
+};
 export default Offers;

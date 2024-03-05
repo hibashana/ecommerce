@@ -12,6 +12,7 @@ import { BiSolidOffer } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 import { FaRegHeart } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
+import { addtoWishlist } from "@/app/action/wishlist";
 
 
 import axios from "axios";
@@ -75,6 +76,25 @@ const Productdetails: React.FC<ProductDetailsProps> = ({ product }) => {
       console.error('Error fetching product details:', error);
     }
   };
+
+  const handleWishlist = async (productId: number) => {
+    try {
+        const status = await addtoWishlist(productId);
+        if (status === 200) {
+            toast.success("Product added to wishlist");
+        } else if (status === 204) {
+            toast.success("Product removed from wishlist");
+        } else if (status === 401) {
+            router.push('/login');
+        } else {
+            toast.error("Failed to update wishlist");
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        toast.error("Failed to update wishlist");
+    }
+};
+
 
   return (
     <div className="flex flex-row px-3">
@@ -142,8 +162,8 @@ const Productdetails: React.FC<ProductDetailsProps> = ({ product }) => {
                <div className="px-2">  
                  <div className="border rounded-2xl cursor-pointer text-center p-2 border-blue-600 logo  font-bold " >Buy now</div>
                </div>
-               <div className="flex justify-center items-center px-2 p-4 cursor-pointer logo">
-                      <FaRegHeart className="mr-2" /> 
+               <div className="flex justify-center items-center px-2 p-4 cursor-pointer logo" onClick={() => handleWishlist(productDetails.id)}>
+                      <FaRegHeart className="mr-2 hover:text-red-600" /> 
                       <div className="text-center font-bold">Add to wishlist</div>
                 </div>
             </div> 

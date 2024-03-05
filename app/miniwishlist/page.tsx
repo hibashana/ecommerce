@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { FaShoppingCart } from "react-icons/fa";
 import { IoIosHeart } from "react-icons/io";
 import { addtoWishlist } from "../action/wishlist";
+import addtoCart from '@/app/action/cart';
 
 const MiniWishlist = () => {
   const [wishlist, setWishlist] = useState<Product[]>([]);
@@ -50,6 +51,19 @@ const MiniWishlist = () => {
     }
 };
 
+const handleAddToCart = async (productId: number) => {
+  const status = await addtoCart(productId);
+  if (status === 200) {
+      toast.success("Product Added to cart");
+      // setMiniCartVisible(true);
+      // setShowOverlay(true);
+  } else if (status === 401) {
+      router.push('/login');
+  } else {
+      toast.error("Failed to Add Product to cart");
+  }
+};
+
   useEffect(() => {
     getWishlistItems();
   }, []);
@@ -77,14 +91,17 @@ const MiniWishlist = () => {
   </div>
      <div
          className="absolute right-0 bottom-16 p-2 rounded-full hover:text-red-700 bg-white text-gray-400 text-xs cursor-pointer"
-         onClick={() => handleWishlist(product.id)}
+        //  onClick={() => handleWishlist(product.id)}
+         onClick={(e) => { e.stopPropagation(); handleWishlist(product.id); }}
+         //here the stopPropagation is To prevent the MiniCart from closing when interacting with its contents
           >
          <ImCross />
      </div>
   {/* <div className="absolute right-1 bottom-16 cursor-pointer text-xl text-red-600 hover:text-red-200" onClick={() => handleWishlist(product.id)}>
     <IoIosHeart />
   </div> */}
-  <div className="absolute right-1 bottom-6 cursor-pointer text-lg hover:text-blue-600">
+  <div className="absolute right-1 bottom-6 cursor-pointer text-lg hover:text-blue-600"
+     onClick={(e) => { e.stopPropagation(); handleAddToCart(product.id); }} >
     <FaShoppingCart /> 
   </div>
   <div>

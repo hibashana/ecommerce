@@ -49,6 +49,7 @@ const Login = () => {
         const token = data.tokens.access.token;
         // console.log(token);
         localStorage.setItem('token', token); 
+       
         // const userId = data.user.id; 
         // localStorage.setItem('userId', userId); 
         // console.log(userId);

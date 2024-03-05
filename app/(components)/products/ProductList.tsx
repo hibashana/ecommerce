@@ -105,12 +105,13 @@
 
 
 import { IoCartOutline, IoCartSharp } from "react-icons/io5";
-import { IoMdHeartEmpty } from "react-icons/io";
+import { IoMdHeartEmpty ,IoMdHeart} from "react-icons/io";
 import React, { useState, useEffect, FC } from "react";
 import axios from "axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { addtoWishlist } from "@/app/action/wishlist";
 import { baseURL, imageURL } from '@/utils/constants';
 import { Toaster, toast } from 'sonner';
 import  {Product} from '@/types';
@@ -134,6 +135,7 @@ interface ProductsProps {
 
 const Products:FC<ProductsProps> = ({ products }) => {
   const [cartStates, setCartStates] = useState<{ [productId: number]: boolean }>({});
+  const [favoriteStates, setFavoriteStates] = useState<{ [productId: number]: boolean }>({});
   const [prodct, setProducts] = useState<Product[]>([]);
 
   const router=useRouter();
@@ -149,6 +151,13 @@ const Products:FC<ProductsProps> = ({ products }) => {
   // const handleOnClick = (name: string) => {
   //   router.push('/components/dummyProduct');
   // };
+
+  const toggleFavorite = (productId: number) => {
+    setFavoriteStates(prevStates => ({
+      ...prevStates,
+      [productId]: !prevStates[productId]
+    }));
+  };
 
   const addtoCart = async (productId: number): Promise<void> => {
 
@@ -194,6 +203,24 @@ const Products:FC<ProductsProps> = ({ products }) => {
       }));
     }
   };
+
+  const handleWishlist = async (productId: number) => {
+    try {
+        const status = await addtoWishlist(productId);
+        if (status === 200) {
+            toast.success("Product added to wishlist");
+        } else if (status === 204) {
+            toast.success("Product removed from wishlist");
+        } else if (status === 401) {
+            router.push('/login');
+        } else {
+            toast.error("Failed to update wishlist");
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        toast.error("Failed to update wishlist");
+    }
+};
  
 
   const settings = {
@@ -229,8 +256,12 @@ const Products:FC<ProductsProps> = ({ products }) => {
                   </p>
                 )}
                 <div className="p-4">
-                  <div className="absolute right-2 top-2 cursor-pointer">
-                    <IoMdHeartEmpty />
+                <div className="absolute right-2 top-2 cursor-pointer" onClick={() => handleWishlist(item.id)}>
+                    {favoriteStates[item.id] ? (
+                      <IoMdHeart onClick={() => toggleFavorite(item.id)} style={{ color: 'red' }} />
+                    ) : (
+                      <IoMdHeartEmpty onClick={() => toggleFavorite(item.id)} />
+                    )}
                   </div>
 
                   <img
