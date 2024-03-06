@@ -67,13 +67,17 @@
 
 // export default Filter;
 
-import React, { useState, useEffect } from 'react';
+import React, { useState,ChangeEvent, useEffect } from 'react';
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import { BsGridFill, BsViewList } from "react-icons/bs";
 import { Product, ProductbyCategory } from "@/types";
 import { sortBy } from './action/sortby';
 
-const Sortby = () => {
+interface SortbyProps {
+  onChange: (value: string) => void;
+}
+
+const Sortby: React.FC<SortbyProps> = ({ onChange }) => {
   const [products, setProducts] = useState<ProductbyCategory[]>([]);
   const [selectedFilter, setSelectedFilter] = useState("default");
 
@@ -98,6 +102,11 @@ const Sortby = () => {
   //   sort(categoryId);
   // };
 
+  const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value;
+    onChange(selectedValue);
+  };
+
   return (
     <div>
       <div className='mt-5 w-full h-20 px-28 ' style={{ backgroundColor: '#F9F1E7' }}>
@@ -113,19 +122,18 @@ const Sortby = () => {
           <div className='flex gap-12 ml-auto px-1 cursor-pointer'>
             <div className="cursor-pointer py-1">Show <span className='bg-white p-2 text-gray-500'>16</span></div>
            
-            <div className='flex px-2 cursor-pointer ' ><span className='hover:text-slate-500  p-1'>Sort by</span>
+            <div className='flex px-2' ><span className='p-1'>Sort by</span>
             {/* onClick={applyFilter()} */}
-              <select
-                value={selectedFilter}
-                onChange={(e) => setSelectedFilter(e.target.value)}
+              <select onChange={handleSortChange}
+                // value={selectedFilter}
+                // onChange={(e) => setSelectedFilter(e.target.value)}
                 className="p-2 border rounded-md"
               >
                 <option value="default">Default</option>
-                <option value="byname">Name</option>
+                <option value="name">Name</option>
                 <option value="price">Price</option>
                 <option value="stockQuantity">Stock Quantity</option>
-                <option value="offerPrice">Offer Price</option>
-                <option value="offerPercentage">Offer Percentage</option>
+               
               </select>
             </div>
           </div>

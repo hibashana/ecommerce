@@ -30,10 +30,12 @@ import Sortby from '@/app/sortProduct';
 // }
 
 
-const ProductbyCategory = () => {
+const ProductbyCategory = (params:any) => {
     const [categoryData, setCategoryData] = useState<string | null>(null);
     const [subCategoryData, setSubCategoryData] = useState<SubCategoryItem[]>([]);
     const [product, setProductData] = useState<ProductbyCategory[]>([]);
+    const[categoryId,setCategoryId]=useState(params.id);
+    // const [page, setPage] = useState(1);
 
     useEffect(() => {
         getCategoryData();
@@ -66,11 +68,15 @@ const ProductbyCategory = () => {
     };
     
 
-    const subCategory = async (categoryId: number) => {
+    const subCategory = async (categoryId: number,selectedValue:string) => {
         try {
-            const { data, status } = await getSubCategoryData(categoryId);
+            console.log(selectedValue);
+            
+            setCategoryId(categoryId);
+            const { data, status } = await getSubCategoryData(categoryId,selectedValue);
             if (status === 200) {
                 setProductData(data.data); 
+                // console.log('Sorting changed:', selectedValue);
             } else {
                 console.error('Error fetching subcategory. Status:', status);
             }
@@ -78,6 +84,12 @@ const ProductbyCategory = () => {
             console.error('Error fetching subcategory:', error);
         }
     };
+
+    const handleSortChange = (selectedValue: string) => {
+        console.log(`sortBy=${selectedValue}`);
+        
+        subCategory(categoryId, selectedValue);       
+      };
 
     return (
         <div className='mb-3 p-2'>
@@ -92,7 +104,7 @@ const ProductbyCategory = () => {
                             <div className="px-3 py-1 pt-8">
                                 <div className='flex flex-row justify-center gap-2'>
                                     {subCategoryData.map((subcategory, index) => (
-                                        <div key={index} onClick={() => subCategory(subcategory.id)}>
+                                        <div key={index} onClick={() => subCategory(subcategory.id,'')}>
                                             <img src={subcategory.imageUrl ? `${imageURL}${subcategory.imageUrl}` : "https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg "} alt={subcategory.name}
                                               onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                                                 const target = e.target as HTMLImageElement;
@@ -122,7 +134,7 @@ const ProductbyCategory = () => {
                                 </div>
                             </div>
                         </div> */}
-                        <Sortby  />
+                        <Sortby onChange={handleSortChange} />
 
                         <Products product={product}/>
                
