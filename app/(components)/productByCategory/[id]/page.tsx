@@ -19,6 +19,7 @@ import getSubCategoryData from '@/app/action/subCategory';
 import Products from '@/app/products';
 import type { ProductbyCategory } from '@/types';
 import { Rating } from "@smastrom/react-rating";
+import Sortby from '@/app/sortProduct';
 
 // import { addtoCart }from "@/app/action/get-cart"
 // import Products from '@/app/products';
@@ -97,8 +98,7 @@ const ProductbyCategory = () => {
                                                 const target = e.target as HTMLImageElement;
                                                 target.src = 'https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg ';
                                                 }}
-                                                className='w-20 gap-2 h-20 rounded-full cursor-pointer'
-                                               
+                                                className='w-20 gap-2 h-20 rounded-full cursor-pointer' 
                                             />
                                             <p className='px-4 '>{subcategory.name}</p>
                                         </div>
@@ -106,7 +106,7 @@ const ProductbyCategory = () => {
                                 </div>
                             </div>
                         )}
-                        <div className='mt-5 w-full h-20 px-28 ' style={{ backgroundColor: '#F9F1E7' }}>
+                        {/* <div className='mt-5 w-full h-20 px-28 ' style={{ backgroundColor: '#F9F1E7' }}>
                             <div className='flex flex-row gap-8  p-5 items-center'>
                                 <div className="flex items-center pb-1 pt-2 gap-2  hover:font-semibold">
                                     <div><HiAdjustmentsHorizontal /></div>
@@ -115,13 +115,14 @@ const ProductbyCategory = () => {
                                 <div><BsGridFill /></div>
                                 <div><BsViewList /></div>
                                 <div className='text-sm font-medium border-l-2 h-12 border-gray-300 pl-6 py-4'>Showing 1-16 of 32 results</div>
-                                   {/* pagination */}
+                                   
                                 <div className='flex gap-12 ml-auto'>
                                     <div className="">Show <span className='bg-white p-2   text-gray-500'>16</span></div>
                                     <div>Sort by<span className='bg-white p-2  text-gray-500'>Default</span></div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
+                        <Sortby  />
 
                         <Products product={product}/>
                

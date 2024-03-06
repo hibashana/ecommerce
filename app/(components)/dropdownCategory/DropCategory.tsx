@@ -159,7 +159,8 @@ return (
                           .filter(subCategory => subCategory.parentId === category.id)
                           .map((subCategory, subIndex) => (
                             <li key={subIndex}>
-                              <div className="cursor-pointer py-1 px-3 hover:text-gray-900 hover:underline text-base">
+                              <div className="cursor-pointer py-1 px-3 hover:text-gray-900 hover:underline text-base"
+                               onClick={() => handleOnClick(subCategory.id)}>
                                 {subCategory.name} 
                               </div>
                             </li>

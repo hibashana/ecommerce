@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import Filter from '../filter';
+import Filter from '../sortProduct';
 import Products from '../products';
 import { Product } from "@/types";
 import Search from '../action/search';
