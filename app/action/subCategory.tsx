@@ -1,8 +1,8 @@
 import { baseURL } from "@/utils/constants";
 
-const getSubCategoryData = async (categoryId: number,selectedValue:string) => {
+const getSubCategoryData = async (categoryId: number,selectedValue:string,page:number) => {
     try {
-        const response = await fetch(`${baseURL}/product-category?categoryId=${categoryId}&sortBy=${selectedValue}`, { cache: 'no-store' });
+        const response = await fetch(`${baseURL}/product-category?categoryId=${categoryId}&sortBy=${selectedValue}&page=${page}`, { cache: 'no-store' });
         const data = await response.json();
         console.log(data);
         return { data, status: response.status }; 
