@@ -26,11 +26,11 @@ const ProductbyCategory = (params: any) => {
         getCategoryData();
     }, []);
 
-    useEffect(() => {
-        if (inView && !loading) {
-            subCategory(categoryId, 'default', page);
-        }
-    }, [inView, loading]);
+    // useEffect(() => {
+    //     if (inView && !loading) {
+    //         subCategory(categoryId, 'default', page);
+    //     }
+    // }, [inView, loading]);
 
     const getCategoryData = async () => {
         try {
@@ -65,6 +65,18 @@ const ProductbyCategory = (params: any) => {
         subCategory(categoryId, selectedValue, 1);
     };
 
+
+    const loadMoreProducts = () => {
+        if (!loading) {
+            subCategory(categoryId, '', page);
+        }
+    };
+    useEffect(() => {
+        if (inView) {
+            loadMoreProducts();
+        }
+    }, [inView]);
+
     return (
         <div className='mb-3 p-2'>
             <div>
@@ -77,7 +89,12 @@ const ProductbyCategory = (params: any) => {
                             <div className="px-3 py-1 pt-8">
                                 <div className='flex flex-row justify-center gap-2'>
                                     {subCategoryData.map((subcategory, index) => (
-                                        <div key={index} onClick={() => subCategory(subcategory.id,'',page)}>
+                                        <div key={index} onClick={() => 
+                                            {
+                                                setProductData([]); // Reset product state to empty 
+                                                setPage(1);
+                                                subCategory(subcategory.id, '', 1);// Always start from page 1 for a new subcategory
+                                            }}>
                                             <img src={subcategory.imageUrl ? `${imageURL}${subcategory.imageUrl}` : "https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg "} alt={subcategory.name}
                                               onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                                                 const target = e.target as HTMLImageElement;
