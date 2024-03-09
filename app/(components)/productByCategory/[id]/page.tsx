@@ -19,7 +19,9 @@ const ProductbyCategory = (params: any) => {
     const [product, setProductData] = useState<ProductbyCategory[]>([]);
     const [categoryId, setCategoryId] = useState(params.id);
     const [page, setPage] = useState(1);
+    const [sortValue, setSortValue] = useState(''); 
     const [loading, setLoading] = useState(false);
+    const [limit, setLimit] = useState(10);
     const { ref, inView } = useInView();
 
     useEffect(() => {
@@ -31,6 +33,13 @@ const ProductbyCategory = (params: any) => {
     //         subCategory(categoryId, 'default', page);
     //     }
     // }, [inView, loading]);
+
+    useEffect(() => {
+        if (params.id) { // Make sure params.id is truthy before setting categoryId
+            setCategoryId(params.id);
+        }
+        getCategoryData();
+    }, [params.id]);
 
     const getCategoryData = async () => {
         try {
@@ -60,7 +69,11 @@ const ProductbyCategory = (params: any) => {
         }
     };
 
+   
+
     const handleSortChange = (selectedValue: string) => {
+        setSortValue(selectedValue); // Update sort value
+        setProductData([]); // Reset product state to empty
         setPage(1); // Reset page when sorting changes
         subCategory(categoryId, selectedValue, 1);
     };
@@ -68,11 +81,11 @@ const ProductbyCategory = (params: any) => {
 
     const loadMoreProducts = () => {
         if (!loading) {
-            subCategory(categoryId, '', page);
+            subCategory(categoryId, sortValue, page);
         }
     };
     useEffect(() => {
-        if (inView) {
+        if (inView ) {
             loadMoreProducts();
         }
     }, [inView]);
