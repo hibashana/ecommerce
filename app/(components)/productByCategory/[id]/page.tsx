@@ -13,6 +13,7 @@ import getSubCategoryData from '@/app/action/subCategory';
 import Products from '@/app/products';
 import Sortby from '@/app/sortProduct';
 
+
 const ProductbyCategory = (params: any) => {
     const [categoryData, setCategoryData] = useState<string | null>(null);
     const [subCategoryData, setSubCategoryData] = useState<SubCategoryItem[]>([]);
@@ -22,6 +23,8 @@ const ProductbyCategory = (params: any) => {
     const [sortValue, setSortValue] = useState(''); 
     const [loading, setLoading] = useState(false);
     const [limit, setLimit] = useState(10);
+    const [totalCount, setTotalCount] = useState<number>(0);
+    
     const { ref, inView } = useInView();
 
     useEffect(() => {
@@ -60,6 +63,10 @@ const ProductbyCategory = (params: any) => {
             if (status === 200) {
                 setProductData(prevProducts => [...prevProducts, ...data.data]);
                 setPage(page + 1);
+                setTotalCount(data.totalCount);
+                console.log(data.totalCount);
+                console.log(data.data.length);
+                
             } else {
                 console.error('Error fetching subcategory. Status:', status);
             }
@@ -121,7 +128,7 @@ const ProductbyCategory = (params: any) => {
                                 </div>
                             </div>
                         )}
-                        <Sortby onChange={handleSortChange} />
+                        <Sortby onChange={handleSortChange} totalCount={totalCount} />
 
                         <Products product={product}/>
                         {/* {loading && <MoonLoader className='item-center' color="#36d7b7" />} */}

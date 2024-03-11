@@ -138,13 +138,15 @@ return (
                             <div className="flex flex-col px-3 gap-1 py-1 relative z-10" style={{ backgroundColor: '#F4F5F7' }}>
                                 <h2 className="text-lg font-semibold">{prod.name}</h2>
                                 <p className="text-gray-600 text-xs">{prod.description}</p>
+                                <div className='text-xs font-bold text-green-700'><span>In stock:</span>{prod.stockQuantity}</div>
+
                                 <div className="flex flex-col">
                     {/* <Rating style={{ maxWidth: 100 }} value={parseFloat(prod.Review?.averageRating || "0")} readOnly /> */}
                     {parseFloat(prod.Review?.averageRating || "0") > 0 && (
                                         <div className="flex flex-col">
                                             <Rating style={{ maxWidth: 100 }} value={parseFloat(prod.Review?.averageRating || "0")} readOnly />
                                         </div>
-                                    )}
+                                    )}  
                   </div>
                                 <div className="flex flex-row gap-3">
                                     {prod.offerPercentage > 0 ? (
@@ -156,7 +158,7 @@ return (
                                         <p className="text-slate-500 line-through">${prod.price}</p>
                                     )}
                                 </div>
-                                
+                               
                             </div>
                         </div>
                     </div>

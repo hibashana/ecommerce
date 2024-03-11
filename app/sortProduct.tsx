@@ -75,9 +75,11 @@ import { sortBy } from './action/sortby';
 
 interface SortbyProps {
   onChange: (value: string) => void;
+  totalCount: number;
+  
 }
 
-const Sortby: React.FC<SortbyProps> = ({ onChange }) => {
+const Sortby: React.FC<SortbyProps> = ({ onChange,totalCount }) => {
   const [products, setProducts] = useState<ProductbyCategory[]>([]);
   const [selectedFilter, setSelectedFilter] = useState("default");
 
@@ -117,10 +119,11 @@ const Sortby: React.FC<SortbyProps> = ({ onChange }) => {
           </div>
           <div><BsGridFill /></div>
           <div><BsViewList /></div>
-          <div className='text-sm font-medium border-l-2 h-12 border-gray-300 pl-6 py-4'>Showing 1-16 of 32 results</div>
+          <div className='text-sm font-medium border-l-2 h-12 border-gray-300 pl-6 py-4'>Showing 1- of {totalCount} results</div>
+          {/* {products.length} */}
           {/* pagination */}
           <div className='flex gap-12 ml-auto px-1 cursor-pointer'>
-            <div className="cursor-pointer py-1">Show <span className='bg-white p-2 text-gray-500'>16</span></div>
+            <div className="cursor-pointer py-1">Show <span className='bg-white p-2 text-gray-500'>{totalCount}</span></div>
            
             <div className='flex px-2' ><span className='p-1'>Sort by</span>
             {/* onClick={applyFilter()} */}
