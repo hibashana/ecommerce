@@ -12,24 +12,33 @@ import fetchCategoryData from '@/app/action/productlist';
 import getSubCategoryData from '@/app/action/subCategory';
 import Products from '@/app/products';
 import Sortby from '@/app/sortProduct';
+import { useParams } from 'next/navigation';
 
+type CategoryIdPageProps = {
+    id: string;
+}
 
-const ProductbyCategory = (params: any) => {
+const ProductbyCategory = ({ id }: CategoryIdPageProps) => {
+   
+
+    // console.log(id);
+
+    const params=useParams();
+    console.log(params)
+    
     const [categoryData, setCategoryData] = useState<string | null>(null);
     const [subCategoryData, setSubCategoryData] = useState<SubCategoryItem[]>([]);
     const [product, setProductData] = useState<ProductbyCategory[]>([]);
-    const [categoryId, setCategoryId] = useState(params.id);
-    const [page, setPage] = useState(1);
-    const [sortValue, setSortValue] = useState(''); 
+    const [categoryId, setCategoryId] = useState(params.id.toString());
+    const [page, setPage] = useState("1");
+    const [sortValue, setSortValue] = useState('');
     const [loading, setLoading] = useState(false);
     const [limit, setLimit] = useState(10);
     const [totalCount, setTotalCount] = useState<number>(0);
-    
+
     const { ref, inView } = useInView();
 
-    useEffect(() => {
-        getCategoryData();
-    }, []);
+
 
     // useEffect(() => {
     //     if (inView && !loading) {
@@ -37,58 +46,72 @@ const ProductbyCategory = (params: any) => {
     //     }
     // }, [inView, loading]);
 
+  
+
     useEffect(() => {
-        if (params.id) { // Make sure params.id is truthy before setting categoryId
-            setCategoryId(params.id);
-        }
+        // if (params.id) {
+            setCategoryId(params.id.toString());
+        // }
+         if (categoryId) { // Make sure params.id is truthy before setting categoryId
+        // setCategoryId(categoryId);
         getCategoryData();
-    }, [params.id]);
+         }
+        console.log("use");
+
+
+    }, [categoryId]);
 
     const getCategoryData = async () => {
         try {
-            const data = await fetchCategoryData();
+            console.log(`cat=${categoryId}`);
+
+            await getProductData(categoryId);
+            const data = await fetchCategoryData(categoryId);
+
             setCategoryData(data.name);
             setSubCategoryData(data.children);
-            setProductData(data.Products);
+            //await getProductData();
+            //setProductData(data.Products);
         } catch (error: any) {
             console.error((error as Error).message);
         }
     };
 
-    const subCategory = async (categoryId: number, selectedValue: string, page: number) => {
+    const getProductData = async (categoryID: String) => {
         try {
-            setCategoryId(categoryId);
             setLoading(true);
-            const { data, status } = await getSubCategoryData(categoryId, selectedValue, page);
+            const { data, status } = await getSubCategoryData(categoryID, sortValue, page);
             if (status === 200) {
                 setProductData(prevProducts => [...prevProducts, ...data.data]);
-                setPage(page + 1);
+              const pg=  parseInt(page)+1;
+                setPage(pg.toString());
                 setTotalCount(data.totalCount);
-                console.log(data.totalCount);
-                console.log(data.data.length);
-                
-            } else {
-                console.error('Error fetching subcategory. Status:', status);
+                console.log(product.length.toString);
+
+
             }
+            //  else {
+            //     console.error('Error fetching subcategory. Status:', status);
+            // }
             setLoading(false);
         } catch (error) {
             console.error('Error fetching subcategory:', error);
         }
     };
 
-   
+
 
     const handleSortChange = (selectedValue: string) => {
         setSortValue(selectedValue); // Update sort value
         setProductData([]); // Reset product state to empty
-        setPage(1); // Reset page when sorting changes
-        subCategory(categoryId, selectedValue, 1);
+        setPage('1'); // Reset page when sorting changes
+        getProductData(categoryId);
     };
 
 
     const loadMoreProducts = () => {
-        if (!loading) {
-            subCategory(categoryId, sortValue, page);
+        if (!loading && categoryId) {
+            getProductData(categoryId);
         }
     };
     useEffect(() => {
@@ -109,18 +132,19 @@ const ProductbyCategory = (params: any) => {
                             <div className="px-3 py-1 pt-8">
                                 <div className='flex flex-row justify-center gap-2'>
                                     {subCategoryData.map((subcategory, index) => (
-                                        <div key={index} onClick={() => 
-                                            {
-                                                setProductData([]); // Reset product state to empty 
-                                                setPage(1);
-                                                subCategory(subcategory.id, '', 1);// Always start from page 1 for a new subcategory
-                                            }}>
+                                        <div key={index} onClick={() => {
+                                            setProductData([]); // Reset product state to empty 
+                                             setPage("1");
+                                            setCategoryId(subcategory.id.toString());
+                                             
+                                            // subCategory(subcategory.id, '', 1);// Always start from page 1 for a new subcategory
+                                        }}>
                                             <img src={subcategory.imageUrl ? `${imageURL}${subcategory.imageUrl}` : "https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg "} alt={subcategory.name}
-                                              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                                                const target = e.target as HTMLImageElement;
-                                                target.src = 'https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg ';
+                                                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                                                    const target = e.target as HTMLImageElement;
+                                                    target.src = 'https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg ';
                                                 }}
-                                                className='w-20 gap-2 h-20 rounded-full cursor-pointer' 
+                                                className='w-20 gap-2 h-20 rounded-full cursor-pointer'
                                             />
                                             <p className='px-4 '>{subcategory.name}</p>
                                         </div>
@@ -130,41 +154,41 @@ const ProductbyCategory = (params: any) => {
                         )}
                         <Sortby onChange={handleSortChange} totalCount={totalCount} />
 
-                        <Products product={product}/>
+                        <Products product={product} />
                         {/* {loading && <MoonLoader className='item-center' color="#36d7b7" />} */}
                         <div ref={ref}></div>
-               
+
                         <div className='mt-5 w-full h-36 px-28 ' style={{ backgroundColor: '#F9F1E7' }}>
                             <div className='p-6'>
-                            <div className='flex flex-row gap-8 justify-center py-5 items-center'>
-                                <div className="flex items-center pb-1 pt-2 gap-2">
-                                    <div className='text-5xl'><HiOutlineTrophy /></div>
-                                    <div className='flex flex-col'>
-                                    <div className='font-semibold'>High Quality</div>
-                                    <div className=' text-gray-500'>product from good materials</div>
+                                <div className='flex flex-row gap-8 justify-center py-5 items-center'>
+                                    <div className="flex items-center pb-1 pt-2 gap-2">
+                                        <div className='text-5xl'><HiOutlineTrophy /></div>
+                                        <div className='flex flex-col'>
+                                            <div className='font-semibold'>High Quality</div>
+                                            <div className=' text-gray-500'>product from good materials</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="flex items-center pb-1 pt-2 ">
-                                    <div className='text-5xl'><HiOutlineTrophy /></div>
-                                    <div className='flex flex-col'>
-                                    <div className='font-semibold'>Warranty Protection</div>
-                                    <div className='text-gray-500'>Over 2 years</div>
+                                    <div className="flex items-center pb-1 pt-2 ">
+                                        <div className='text-5xl'><HiOutlineTrophy /></div>
+                                        <div className='flex flex-col'>
+                                            <div className='font-semibold'>Warranty Protection</div>
+                                            <div className='text-gray-500'>Over 2 years</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="flex items-center pb-1 pt-2 gap-2">
-                                    <div className='text-5xl'><FaHandHoldingUsd/></div>
-                                    <div className='flex flex-col'>
-                                    <div className='font-semibold'>Free Shipping</div>
-                                    <div className='text-gray-500'>Order over $100</div>
+                                    <div className="flex items-center pb-1 pt-2 gap-2">
+                                        <div className='text-5xl'><FaHandHoldingUsd /></div>
+                                        <div className='flex flex-col'>
+                                            <div className='font-semibold'>Free Shipping</div>
+                                            <div className='text-gray-500'>Order over $100</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="flex items-center pb-1 pt-2 gap-2">
-                                    <div className='text-5xl'><MdSupportAgent/></div>
-                                    <div className='flex flex-col'>
-                                    <div className='font-semibold'>24/7 Support</div>
-                                    <div className='text-gray-500'>Dedicated support</div>
+                                    <div className="flex items-center pb-1 pt-2 gap-2">
+                                        <div className='text-5xl'><MdSupportAgent /></div>
+                                        <div className='flex flex-col'>
+                                            <div className='font-semibold'>24/7 Support</div>
+                                            <div className='text-gray-500'>Dedicated support</div>
+                                        </div>
                                     </div>
-                                </div>
                                 </div>
                             </div>
                         </div>
